@@ -20,6 +20,8 @@
 #  flat        :string
 #  note        :string
 #  phone       :string
+#  packed_at   :datetime
+#  shipped_at  :datetime
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
@@ -30,7 +32,7 @@ class Order < ApplicationRecord
     canceled: 'canceled'
   }.freeze
 
-  enum state: ORDER_STATES
+  enum :state, ORDER_STATES
 
   belongs_to :user
   belongs_to :supplier, optional: true
@@ -38,7 +40,6 @@ class Order < ApplicationRecord
 
   has_many :order_items, dependent: :destroy
   has_many :items, through: :order_items, dependent: :destroy
-  has_many :order_histories, dependent: :destroy
 
   def update_total
     update(total: order_items.reload.map(&:total).sum)

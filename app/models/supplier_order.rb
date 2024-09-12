@@ -20,6 +20,8 @@
 #  flat        :string
 #  note        :string
 #  phone       :string
+#  packed_at   :datetime
+#  shipped_at  :datetime
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
