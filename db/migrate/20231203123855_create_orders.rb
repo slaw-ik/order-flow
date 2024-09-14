@@ -21,6 +21,7 @@ class CreateOrders < ActiveRecord::Migration[7.1]
       t.string :phone
       t.datetime :packed_at
       t.datetime :shipped_at
+      t.datetime :cancelled_at
 
       t.timestamps
     end

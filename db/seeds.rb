@@ -46,6 +46,18 @@ ActiveRecord::Base.transaction do
   OrderItem.create!(order: supplier_order, item: items[0], count: 10)
 
   30.times do |i|
+    order_state = Order::ORDER_STATES.values.sample
+    created_at = Time.current - rand(1..30).days
+    case order_state
+    when Order::ORDER_STATES[:packed]
+      packed_at = created_at - rand(1..10).days
+    when Order::ORDER_STATES[:shipped]
+      packed_at = created_at - rand(1..10).days
+      shipped_at = packed_at + rand(1..10).days
+    when Order::ORDER_STATES[:cancelled]
+      cancelled_at = created_at - rand(1..30).days
+    end
+
     itms = items.dup.shuffle
     client = clients.sample
     order = ClientOrder.create!(
@@ -55,7 +67,13 @@ ActiveRecord::Base.transaction do
       city: client.address.city,
       region: client.address.region,
       street: client.address.street,
-      building: client.address.building
+      building: client.address.building,
+      note: Faker::Lorem.sentence,
+      state: order_state,
+      packed_at: packed_at,
+      shipped_at: shipped_at,
+      cancelled_at: cancelled_at,
+      created_at: created_at
     )
     rand(1..5).times do
       OrderItem.create!(order:, item: itms.pop, count: rand(1..10))

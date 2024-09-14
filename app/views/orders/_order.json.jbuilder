@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 json.extract! order, :id, :user_id, :supplier_id, :client_id, :type, :state, :total, :country, :city, :region,
-              :phone, :post_code, :building, :flat, :street, :note, :created_at, :updated_at
+              :phone, :post_code, :building, :flat, :street, :note, :created_at, :updated_at, :packed_at, :shipped_at,
+              :cancelled_at
 
 json.fullAddress order.full_address
 

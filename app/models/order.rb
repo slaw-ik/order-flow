@@ -28,8 +28,9 @@
 class Order < ApplicationRecord
   ORDER_STATES = {
     pending: 'pending',
-    delivered: 'delivered',
-    canceled: 'canceled'
+    packed: 'packed',
+    shipped: 'shipped',
+    cancelled: 'cancelled'
   }.freeze
 
   enum :state, ORDER_STATES
