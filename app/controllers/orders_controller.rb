@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class OrdersController < ApplicationController
-  before_action :set_order, only: %i[show edit update destroy]
+  before_action :set_order, only: %i[show edit update destroy change_state]
   skip_before_action :verify_authenticity_token
 
   # GET /orders or /orders.json
@@ -49,6 +49,30 @@ class OrdersController < ApplicationController
       format.html { redirect_to orders_url, notice: 'Order was successfully destroyed.' }
       format.json { render json: Order.all, status: :ok }
     end
+  end
+
+  def change_state
+    state = params[:state]
+
+    if state.blank? || Order::ORDER_STATES.values.exclude?(state)
+      render json: { error: 'Invalid state' }, status: :unprocessable_entity
+      return
+    end
+
+    @order.state = state
+
+    case state
+    when Order::ORDER_STATES[:packed]
+      @order.packed_at = Time.zone.now
+    when Order::ORDER_STATES[:shipped]
+      @order.shipped_at = Time.zone.now
+    when Order::ORDER_STATES[:cancelled]
+      @order.cancelled_at = Time.zone.now
+    end
+
+    @order.save
+
+    render :show, status: :ok, locals: { order: @order }
   end
 
   private

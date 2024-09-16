@@ -1,7 +1,12 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  resources :orders
+  resources :orders do
+    member do
+      post :change_state
+    end
+  end
+
   resources :suppliers
   resources :addresses
   resources :users
